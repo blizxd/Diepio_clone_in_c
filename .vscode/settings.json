@@ -1,0 +1,51 @@
+{
+  "files.associations": {
+    "stdio.h": "c",
+    "sdl.h": "c",
+    "sdl_image.h": "c",
+    "math.h": "c",
+    "time.h": "c",
+    "helper.h": "c",
+    "game.h": "c",
+    "player.h": "c",
+    "gameobject.h": "c",
+    "stdlib.h": "c",
+    "map.h": "c",
+    "obstacle.h": "c",
+    "config.h": "c",
+    "projectile.h": "c",
+    "healtbar.h": "c",
+    "string.h": "c",
+    "ui.h": "c",
+    "mainmenu.h": "c",
+    "savegame.h": "c",
+    "enemy.h": "c",
+    "menuBackground.h": "c",
+    "scoreboard.h": "c"
+  },
+  "C_Cpp.dimInactiveRegions": true,
+  "C_Cpp.default.compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
+  "makefile.launchConfigurations": [
+    {
+      "cwd": "c:\\Users\\TheUser\\Documents\\Programming\\C\\PPHomework - Game\\build\\bin",
+      "binaryPath": "c:\\Users\\TheUser\\Documents\\Programming\\C\\PPHomework - Game\\build\\bin\\main.exe",
+      "binaryArgs": []
+    }
+  ],
+  "makefile.configurations": [
+    {
+      "name": "Debug",
+      "cwd": "c:\\Users\\TheUser\\Documents\\Programming\\C\\PPHomework - Game",
+      "makefile": "makefile",
+      "configuration": "Debug",
+      "makeArgs": ["DEBUG=1"]
+    },
+    {
+      "name": "Release",
+      "cwd": "c:\\Users\\TheUser\\Documents\\Programming\\C\\PPHomework - Game",
+      "makefile": "makefile",
+      "configuration": "Release",
+      "makeArgs": ["DEBUG=0"]
+    }
+  ]
+}

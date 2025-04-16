@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(gdb) Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/bin/main.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "environment": [],
+      "cwd": "${workspaceFolder}/build/bin/",
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerArgs": "set disable-randomization off",
+      "preLaunchTask": "make debug"
+    }
+  ]
+}
