@@ -1,18 +1,17 @@
+#include <UI.h>
+#include <enemy.h>
 #include <game.h>
 #include <helper.h>
-#include <stdlib.h>
+#include <logtofile.h>
+#include <mainMenu.h>
 #include <map.h>
 #include <obstacle.h>
 #include <player.h>
 #include <projectile.h>
-#include <UI.h>
-#include <mainMenu.h>
 #include <savegame.h>
-#include <enemy.h>
-#include <game.h>
-#include <string.h>
 #include <scoreboard.h>
-#include <logtofile.h>
+#include <stdlib.h>
+#include <string.h>
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -31,195 +30,195 @@ int msSinceSavegame;
 int initGame()
 {
 
-  loadResources();
+    loadResources();
 
-  saveFileExists = saveGamefileExists();
+    saveFileExists = saveGamefileExists();
 
-  msSinceSavegame = SDL_GetTicks();
+    msSinceSavegame = SDL_GetTicks();
 
-  return 0;
+    return 0;
 }
 
 int loadResources()
 {
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-  {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
 
-    printf("Error initializing SDL: %s\n", SDL_GetError());
+        printf("Error initializing SDL: %s\n", SDL_GetError());
 
-    return 1;
-  }
-  printf("SDL successfully initialized!\n");
+        return 1;
+    }
+    printf("SDL successfully initialized!\n");
 
-  if (TTF_Init() != 0)
-  {
-    printf("error initializing SDL_ttf");
-  }
-  printf("SDL_ttf successfully initalized \n");
+    if (TTF_Init() != 0)
+    {
+        printf("error initializing SDL_ttf");
+    }
+    printf("SDL_ttf successfully initalized \n");
 
-  SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
-  SDL_SetWindowTitle(window, "My game");
+    SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
+    SDL_SetWindowTitle(window, "My game");
 
-  initTextures(renderer);
+    initTextures(renderer);
 
-  initMap(renderer);
+    initMap(renderer);
 
-  srand(time(NULL));
+    srand(time(NULL));
 
-  initFonts();
-  initMainMenuBackground();
+    initFonts();
+    initMainMenuBackground();
 
-  RestartGameLogic();
+    RestartGameLogic();
 
-  currentScene = MAIN_MENU;
+    currentScene = MAIN_MENU;
 
-  return 0;
+    return 0;
 }
 
 int RestartGameLogic()
 {
 
-  memset(&player, 0, sizeof(player));
-  memset(&obstacleGroup, 0, sizeof(obstacleGroup));
-  memset(&EG, 0, sizeof(EG));
-  EG.enemies = NULL;
+    memset(&player, 0, sizeof(player));
+    memset(&obstacleGroup, 0, sizeof(obstacleGroup));
+    memset(&EG, 0, sizeof(EG));
+    EG.enemies = NULL;
 
-  obstacleGroup.activeCount = 0;
-  createPlayer(&player, renderer, (SDL_Point){0, 0});
-  createRandomObstacles(renderer, MAX_OBSTACLES);
+    obstacleGroup.activeCount = 0;
+    createPlayer(&player, renderer, (SDL_Point){0, 0});
+    createRandomObstacles(renderer, MAX_OBSTACLES);
 
-  return 0;
+    return 0;
 }
 
 void createNewGame()
 {
-  msSinceSavegame = SDL_GetTicks();
+    msSinceSavegame = SDL_GetTicks();
 
-  RestartGameLogic();
-  currentScene = GAME;
+    RestartGameLogic();
+    currentScene = GAME;
 }
 
 void loadGameFromFile()
 {
-  msSinceSavegame = SDL_GetTicks();
+    msSinceSavegame = SDL_GetTicks();
 
-  getGamedataFromFile(&player, &obstacleGroup);
-  currentScene = GAME;
+    getGamedataFromFile(&player, &obstacleGroup);
+    currentScene = GAME;
 }
 
 int handleUserInput()
 {
-  SDL_Event e;
+    SDL_Event e;
 
-  while (SDL_PollEvent(&e))
-  {
-
-    if (e.type == SDL_QUIT)
+    while (SDL_PollEvent(&e))
     {
-      isRunning = 0;
+
+        if (e.type == SDL_QUIT)
+        {
+            isRunning = 0;
+        }
+
+        else if (currentScene == GAME)
+        {
+            handlePlayerInput(&player, e);
+            handleUIInput(e, &player);
+        }
+        else if (currentScene == MAIN_MENU)
+        {
+            handleMenuInput(e);
+        }
+        else if (currentScene == SCOREBOARD)
+        {
+            handleScoreBoardInput(e);
+        }
     }
 
-    else if (currentScene == GAME)
-    {
-      handlePlayerInput(&player, e);
-      handleUIInput(e, &player);
-    }
-    else if (currentScene == MAIN_MENU)
-    {
-      handleMenuInput(e);
-    }
-    else if (currentScene == SCOREBOARD)
-    {
-      handleScoreBoardInput(e);
-    }
-  }
-
-  return 0;
+    return 0;
 }
 
 int gameUpdate()
 {
 
-  if (SDL_GetTicks() - msSinceSavegame > 5000 && AUTOSAVE)
-  {
-    saveGamedataToFile(&player, &obstacleGroup);
-    msSinceSavegame = SDL_GetTicks();
-  }
+    if (SDL_GetTicks() - msSinceSavegame > 5000 && AUTOSAVE)
+    {
+        saveGamedataToFile(&player, &obstacleGroup);
+        msSinceSavegame = SDL_GetTicks();
+    }
 
-  updatePlayer(&player, camera, renderer);
+    updatePlayer(&player, camera, renderer);
 
-  spawnRandomObstacle(renderer);
+    spawnRandomObstacle(renderer);
 
-  updateProjectiles(&player.projGroup);
+    updateProjectiles(&player.projGroup);
 
-  updateEnemyGroup(&player);
+    updateEnemyGroup(&player);
 
-  setCamera(&camera, player.pos);
+    setCamera(&camera, player.pos);
 
-  return 0;
+    return 0;
 }
 
 int gameRender()
 {
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
 
-  drawMap(renderer, &camera);
+    drawMap(renderer, &camera);
 
-  renderPlayer(&player, camera, renderer);
+    renderPlayer(&player, camera, renderer);
 
-  renderObstacleGroup(renderer, camera);
+    renderObstacleGroup(renderer, camera);
 
-  renderProjectiles(&player.projGroup, renderer);
+    renderProjectiles(&player.projGroup, renderer);
 
-  renderEnemyGroup();
+    renderEnemyGroup();
 
-  displayScore(renderer, &player);
+    displayScore(renderer, &player);
 
-  displayAvailableUpgrades(renderer, &player);
+    displayAvailableUpgrades(renderer, &player);
 
-  displayMessage();
+    displayMessage();
 
-  displayKillCount(&player);
+    displayKillCount(&player);
 
-  SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer);
 
-  return 0;
+    return 0;
 }
 
 void switchToMainMenu()
 {
-  saveFileExists = saveGamefileExists();
-  initMainMenuBackground();
-  RestartGameLogic();
-  currentScene = MAIN_MENU;
+    saveFileExists = saveGamefileExists();
+    initMainMenuBackground();
+    RestartGameLogic();
+    currentScene = MAIN_MENU;
 }
 
 void shutdownGame()
 {
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }
 
 int runGame()
 {
-  handleUserInput();
+    handleUserInput();
 
-  if (currentScene == MAIN_MENU)
-  {
-    updateMenuBackground();
-    renderMenu();
-  }
-  else if (currentScene == SCOREBOARD)
-  {
-    updateMenuBackground();
-    displayScoreboard();
-  }
-  else if (currentScene == GAME)
-  {
-    gameUpdate();
-    gameRender();
-  }
-  return 0;
+    if (currentScene == MAIN_MENU)
+    {
+        updateMenuBackground();
+        renderMenu();
+    }
+    else if (currentScene == SCOREBOARD)
+    {
+        updateMenuBackground();
+        displayScoreboard();
+    }
+    else if (currentScene == GAME)
+    {
+        gameUpdate();
+        gameRender();
+    }
+    return 0;
 }
