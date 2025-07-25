@@ -1,7 +1,7 @@
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <helper.h>
 #include <game.h>
 #include <config.h>

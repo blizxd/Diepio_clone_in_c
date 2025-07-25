@@ -1,6 +1,6 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <config.h>
 #include <helper.h>
 #include <math.h>
