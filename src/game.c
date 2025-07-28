@@ -56,7 +56,8 @@ int loadResources()
     }
     printf("SDL_ttf successfully initalized \n");
 
-    SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(SCREEN_WIDTH * SCALE_FACTOR, SCREEN_HEIGHT * SCALE_FACTOR, 0, &window, &renderer);
+    SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_SetWindowTitle(window, "My game");
 
     initTextures(renderer);

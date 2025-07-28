@@ -248,6 +248,8 @@ void handlePlayerInput(Player *player, SDL_Event e)
     else if (e.type == SDL_MOUSEMOTION)
     {
         SDL_GetMouseState(&mousePos.x, &mousePos.y);
+        mousePos.x /= SCALE_FACTOR;
+        mousePos.y /= SCALE_FACTOR;
     }
 }
 

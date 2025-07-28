@@ -12,6 +12,8 @@ int handleMenuInput(SDL_Event e)
     if (e.type == SDL_MOUSEMOTION)
     {
         SDL_GetMouseState(&mousePos.x, &mousePos.y);
+        mousePos.x /= SCALE_FACTOR;
+        mousePos.y /= SCALE_FACTOR;
     }
     else if (e.type == SDL_KEYDOWN)
     {
